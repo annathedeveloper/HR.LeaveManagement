@@ -20,11 +20,13 @@ namespace HR.LeaveManagement.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM login, string returnUrl)
         {
-            returnUrl ??= Url.Content("~/");
-            var isLoggedIn = await _authService.Authenticate(login.Email, login.Password);
-            if (isLoggedIn)
-                return LocalRedirect(returnUrl);
-
+            if(ModelState.IsValid)
+            {
+                returnUrl ??= Url.Content("~/");
+                var isLoggedIn = await _authService.Authenticate(login.Email, login.Password);
+                if (isLoggedIn)
+                    return LocalRedirect(returnUrl);
+            }
             ModelState.AddModelError("", "Log In Attempt Failed. Please try again.");
             return View(login);
 
@@ -35,9 +37,18 @@ namespace HR.LeaveManagement.MVC.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(RegisterVM registration)
+        public async Task<IActionResult> Register(RegisterVM registration)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var returnUrl = Url.Content("~/");
+                var isCreated = await _authService.Register(registration);
+                if (isCreated)
+                    return LocalRedirect(returnUrl);
+
+            }
+            ModelState.AddModelError("", "Registration Attempt Failed. Please try again.");
+            return View(registration);
         }
         [HttpPost]
         public async Task<IActionResult> Logout(string returnUrl)

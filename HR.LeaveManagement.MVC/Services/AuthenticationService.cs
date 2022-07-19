@@ -1,4 +1,6 @@
-﻿using HR.LeaveManagement.MVC.Contracts;
+﻿using AutoMapper;
+using HR.LeaveManagement.MVC.Contracts;
+using HR.LeaveManagement.MVC.Models;
 using HR.LeaveManagement.MVC.Services.Base;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,12 +13,18 @@ namespace HR.LeaveManagement.MVC.Services
     {
         private readonly IHttpContextAccessor _httpContextAcessor;
         private JwtSecurityTokenHandler _tokenHandler;
+        private readonly IMapper _mapper;
 
-        public AuthenticationService(IClient client, ILocalStorageService localStorage, IHttpContextAccessor httpContextAcessor, JwtSecurityTokenHandler tokenHandler) 
+
+        public AuthenticationService(IClient client, ILocalStorageService localStorage,
+            IHttpContextAccessor httpContextAcessor, JwtSecurityTokenHandler tokenHandler,
+            IMapper mapper) 
             : base(client, localStorage)
         {
             this._httpContextAcessor = httpContextAcessor;
+            this._mapper = mapper;
             this._tokenHandler = new JwtSecurityTokenHandler();
+
         }
 
         public async Task<bool> Authenticate(string email, string password)
@@ -45,14 +53,16 @@ namespace HR.LeaveManagement.MVC.Services
             }
         }       
 
-        public async Task<bool> Register(string firstName, string lastName, string userName, string email, string password)
+        public async Task<bool> Register(RegisterVM registration)
         {
-            RegistrationRequest registrationRequest = new() { FirstName = firstName, LastName = lastName, Email = email, UserName = userName, Password = password };
+            RegistrationRequest registrationRequest = _mapper.Map<RegistrationRequest>(registration);
             var response = await _client.RegisterAsync(registrationRequest);
 
             if (!string.IsNullOrEmpty(response.UserId))
+            {
+                await Authenticate(registration.Email, registration.Password);
                 return true;
-            
+            }
             return false;
         }
         public async Task Logout()

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HR.LeaveManagement.MVC.Models;
 using HR.LeaveManagement.MVC.Models.LeaveType;
 using HR.LeaveManagement.MVC.Services.Base;
 
@@ -10,6 +11,7 @@ namespace HR.LeaveManagement.MVC
         {
             CreateMap<CreateLeaveTypeDto, CreateLeaveTypeVM>().ReverseMap();
             CreateMap<LeaveTypeDto, LeaveTypeVM>().ReverseMap();
+            CreateMap<RegisterVM, RegistrationRequest>().ReverseMap();
         }
     }
 }

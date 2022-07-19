@@ -2,7 +2,7 @@
 
 namespace HR.LeaveManagement.Api.Extensions
 {
-    public static class SwaggerDocRegistration
+    public static class SwaggerExtensions
     {
         public static IServiceCollection AddSwaggerDoc(this IServiceCollection services, IConfiguration configuration)
         {
