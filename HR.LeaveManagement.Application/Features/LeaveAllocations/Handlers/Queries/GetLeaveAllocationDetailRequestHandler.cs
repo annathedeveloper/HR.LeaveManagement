@@ -5,14 +5,15 @@ using HR.LeaveManagement.Application.Contracts.Persistence;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using HR.LeaveManagement.Application.Features.LeaveRequests.Requests.Queries;
 
 namespace HR.LeaveManagement.Application.Features.LeaveAllocations.Handlers.Queries
 {
-    public class GetLeaveRequestDetailRequestHandler : IRequestHandler<GetLeaveAllocationDetailRequest, LeaveAllocationDto>
+    public class GetLeaveAllocationDetailRequestHandler : IRequestHandler<GetLeaveAllocationDetailRequest, LeaveAllocationDto>
     {
         private readonly ILeaveAllocationRepository _leaveAllocationRepository;
         private readonly IMapper _mapper;
-        public GetLeaveRequestDetailRequestHandler(ILeaveAllocationRepository leaveAllocationRepository, IMapper mapper)
+        public GetLeaveAllocationDetailRequestHandler(ILeaveAllocationRepository leaveAllocationRepository, IMapper mapper)
         {
             _leaveAllocationRepository = leaveAllocationRepository;
             _mapper = mapper;

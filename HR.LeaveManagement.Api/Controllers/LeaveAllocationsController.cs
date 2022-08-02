@@ -19,23 +19,23 @@ namespace HR.LeaveManagement.Api.Controllers
         {
             _mediator = mediator;
         }
-        // GET: api/<LeaveTypesController>
+        // GET: api/<LeaveAllocationsController>
         [HttpGet]
-        public async Task<ActionResult<List<LeaveAllocationDto>>> Get()
+        public async Task<ActionResult<List<LeaveAllocationDto>>> Get(bool isLoggedInUser = false)
         {
-            var leaveAllocations = await _mediator.Send(new GetLeaveAllocationListRequest());
+            var leaveAllocations = await _mediator.Send(new GetLeaveAllocationListRequest() { IsLoggedInUser = isLoggedInUser});
             return Ok(leaveAllocations);
         }
 
-        // GET api/<LeaveTypesController>/5
+        // GET api/<LeaveAllocationsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LeaveAllocationDto>> Get(int id)
         {
-            var leaveType = await _mediator.Send(new GetLeaveAllocationDetailRequest { Id = id });
-            return Ok(leaveType);
+            var leaveAllocation = await _mediator.Send(new GetLeaveAllocationDetailRequest { Id = id });
+            return Ok(leaveAllocation);
         }
 
-        // POST api/<LeaveTypesController>
+        // POST api/<LeaveAllocationsController>
         [HttpPost]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateLeaveAllocationDto leaveAllocation)
         {
@@ -44,7 +44,7 @@ namespace HR.LeaveManagement.Api.Controllers
             return Ok(response);
         }
 
-        // PUT api/<LeaveTypesController>/5
+        // PUT api/<LeaveAllocationsController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] UpdateLeaveAllocationDto leaveAllocation)
         {
@@ -53,7 +53,7 @@ namespace HR.LeaveManagement.Api.Controllers
             return NoContent();
         }
 
-        // DELETE api/<LeaveTypesController>/5
+        // DELETE api/<LeaveAllocationsController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

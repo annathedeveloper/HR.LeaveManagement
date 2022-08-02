@@ -9,7 +9,6 @@ using HR.LeaveManagement.Application.Responses;
 using HR.LeaveManagementApplication.UnitTests.Mocks;
 using Moq;
 using Shouldly;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
