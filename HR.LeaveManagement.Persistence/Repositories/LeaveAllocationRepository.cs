@@ -15,7 +15,6 @@ namespace HR.LeaveManagement.Persistence.Repositories
         public async Task AddAllocations(List<LeaveAllocation> allocations)
         {
             await _context.AddRangeAsync(allocations);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> AllocationExists(string userId, int leaveTypeId, int period)

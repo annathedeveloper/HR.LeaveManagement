@@ -3,6 +3,7 @@ using HR.LeaveManagement.Application;
 using HR.LeaveManagement.Persistence;
 using HR.LeaveManagement.Identity;
 using HR.LeaveManagement.Api.Extensions;
+using HR.LeaveManagement.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HR.LeaveManagement.Api v1"));
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
