@@ -16,6 +16,7 @@ namespace HR.LeaveManagement.Application.Models.Identity
         public string UserName { get; set; }
         [Required]
         [MinLength(6)]
+        [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*\d)(?!.*\.).*", ErrorMessage = "Password must have at least one non-alpha character and at least one digit ('0'-'9')")]
         public string Password { get; set; }
     }
 }

@@ -9,5 +9,10 @@ namespace HR.LeaveManagement.Domain.Common
         public string CreatedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public string LastModifiedBy { get; set; }
+
+        public BaseDomainEntity()
+        {
+            LastModifiedDate = DateTime.Now;
+        }
     }
 }

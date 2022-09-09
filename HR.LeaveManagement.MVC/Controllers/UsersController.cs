@@ -1,6 +1,8 @@
 ﻿using HR.LeaveManagement.MVC.Contracts;
 using HR.LeaveManagement.MVC.Models;
+using HR.LeaveManagement.MVC.Services.Base;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace HR.LeaveManagement.MVC.Controllers
 {
@@ -39,15 +41,37 @@ namespace HR.LeaveManagement.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registration)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var returnUrl = Url.Content("~/");
-                var isCreated = await _authService.Register(registration);
-                if (isCreated)
-                    return LocalRedirect(returnUrl);
-
+                if (ModelState.IsValid)
+                {
+                    var returnUrl = Url.Content("~/");
+                    var isCreated = await _authService.Register(registration);
+                    if (isCreated)
+                        return LocalRedirect(returnUrl);
+                }
             }
-            ModelState.AddModelError("", "Registration Attempt Failed. Please try again.");
+            catch (ApiException ex)
+            {
+                
+                if (ex.StatusCode == StatusCodes.Status422UnprocessableEntity)
+                {
+                    var deserialized_response = JsonConvert.DeserializeObject<List<string>>(ex.Response, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                    
+                    if (deserialized_response != null)
+                    {
+                        foreach (var error in deserialized_response)
+                        {
+                            ModelState.AddModelError("", error);
+                        }
+                    }
+                }
+                if (ex.StatusCode == StatusCodes.Status500InternalServerError)
+                {
+                    var deserialized_response = JsonConvert.DeserializeObject<ErrorDetails>(ex.Response, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                    ModelState.AddModelError("", "Registration Attempt Failed. Please try again.");
+                }
+            }            
             return View(registration);
         }
         [HttpPost]

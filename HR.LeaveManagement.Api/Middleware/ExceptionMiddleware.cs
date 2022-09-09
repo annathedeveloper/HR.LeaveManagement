@@ -1,4 +1,5 @@
 ﻿using HR.LeaveManagement.Application.Exceptions;
+using HR.LeaveManagement.Identity.Exceptions;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -39,6 +40,10 @@ namespace HR.LeaveManagement.Api.Middleware
                 case ValidationException validationException:
                     statusCode = HttpStatusCode.BadRequest;
                     result = JsonConvert.SerializeObject(validationException.Errors);
+                    break;
+                case IdentityException identityException:
+                    statusCode = HttpStatusCode.UnprocessableEntity;
+                    result = JsonConvert.SerializeObject(identityException.Errors);
                     break;
                 case NotFoundException notFoundException:
                     statusCode = HttpStatusCode.NotFound;

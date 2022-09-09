@@ -22,6 +22,7 @@ namespace HR.LeaveManagement.Api.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(200)]
         public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest request)
         {
             return Ok(await _authService.Register(request));

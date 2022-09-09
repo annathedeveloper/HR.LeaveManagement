@@ -1,6 +1,7 @@
 ﻿using HR.LeaveManagement.Application.Constants;
 using HR.LeaveManagement.Application.Contracts.Identity;
 using HR.LeaveManagement.Application.Models.Identity;
+using HR.LeaveManagement.Identity.Exceptions;
 using HR.LeaveManagement.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -31,14 +32,14 @@ namespace HR.LeaveManagement.Identity.Services
 
             if (user == null)
             {
-                throw new Exception($"User with {request.Email} not found");
+                throw new Exception("Credentials aren't valid.");
             }
 
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
 
             if (!result.Succeeded)
             {
-                throw new Exception($"Credentials for {request.Email} aren't valid.");
+                throw new Exception($"Credentials aren't valid.");
             }
 
             JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
@@ -85,11 +86,11 @@ namespace HR.LeaveManagement.Identity.Services
                 }
                 else
                 {
-                    throw new Exception($"{result.Errors}");
+                    throw new IdentityException(result);
                 }
             }
             else
-            {
+            {                
                 throw new Exception($"Email {request.Email } already exists.");
             }
         }
